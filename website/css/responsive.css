@@ -1,241 +1,190 @@
-/* ============================================
-   FERN BANK - RESPONSIVE DESIGN
-   ============================================ */
-
-/* Tablet (768px and up) */
-@media (max-width: 1024px) {
-    .navbar-container {
-        padding: 0 15px;
-    }
-
-    .nav-links {
-        gap: 20px;
-        font-size: 14px;
-    }
-
-    .container {
-        padding: 30px 15px;
-    }
-
-    .action-grid {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    }
-
-    .settings-layout {
-        grid-template-columns: 200px 1fr;
-        gap: 20px;
-    }
-
-    .card-display {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .balance-card {
-        padding: 20px;
-    }
-
-    .balance-amount h3 {
-        font-size: 36px;
-    }
+@media (max-width: 1100px) {
+  .app-shell { grid-template-columns: 88px minmax(0, 1fr); }
+  .sidebar { width: 88px; padding-inline: 14px; }
+  .sidebar .brand > span:last-child, .nav-item span { display: none; }
+  .brand { justify-content: center; }
+  .nav-item { justify-content: center; }
+  .workspace { grid-column: 2; padding-inline: 28px; }
+  .quick-grid { grid-template-columns: repeat(2, 1fr); }
+  .account-grid { grid-template-columns: repeat(2, 1fr); }
+  .account-grid > :last-child { grid-column: 1 / -1; }
+  .cards-layout { grid-template-columns: 1fr; }
+  .bank-card { max-width: 520px; }
+}
+@media (max-width: 780px) {
+  .app-shell { display: block; }
+  .sidebar { width: min(300px, 84vw); padding: 28px 20px; transform: translateX(-105%); transition: transform .22s ease; }
+  .sidebar.is-open { transform: none; box-shadow: var(--cp-shadow); }
+  .sidebar .brand > span:last-child, .nav-item span { display: inline; }
+  .sidebar .brand, .nav-item { justify-content: flex-start; }
+  .mobile-header { position: sticky; top: 0; z-index: 25; display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid var(--cp-border); background: var(--cp-panel-strong); }
+  .mobile-header .brand-mark { width: 32px; height: 32px; }
+  .workspace { padding: 22px 18px 54px; }
+  .topbar { justify-content: flex-end; min-height: 42px; margin-bottom: 28px; }
+  .topbar > div:first-child { display: none; }
+  .hero-grid, .content-grid, .exchange-panel, .payment-layout, .insights-grid, .settings-layout { grid-template-columns: 1fr; }
+  .balance-card, .spotlight-card { min-height: auto; }
+  .spotlight-card { min-height: 270px; }
+  .exchange-form { grid-template-columns: 1fr; }
+  .swap-button { justify-self: center; margin: -4px 0; }
+  .account-grid, .metric-grid { grid-template-columns: 1fr; }
+  .account-grid > :last-child { grid-column: auto; }
+  .settings-tabs { display: flex; overflow-x: auto; }
+  .settings-tabs button { white-space: nowrap; }
+  .review-sheet { top: auto; width: 100%; height: auto; max-height: 88vh; overflow: auto; border-top: 1px solid var(--cp-border); border-left: 0; border-radius: 16px 16px 0 0; }
+  .sheet-handle { display: block; width: 44px; height: 4px; margin: -20px auto 20px; border-radius: 999px; background: var(--cp-border-strong); }
+}
+@media (max-width: 520px) {
+  .profile-copy { display: none; }
+  .topbar-actions { gap: 5px; }
+  .page-intro { align-items: flex-start; flex-direction: column; }
+  .page-intro .primary-button { width: 100%; }
+  .balance-line { font-size: 2.7rem; }
+  .balance-trend { margin-bottom: 28px; }
+  .hero-actions { flex-direction: column; }
+  .hero-actions button { width: 100%; }
+  .quick-grid { grid-template-columns: 1fr; }
+  .spotlight-card { grid-template-columns: 1fr; }
+  .goal-ring { grid-row: 2; justify-self: center; }
+  .goal-footer { flex-direction: column; }
+  .surface { padding: 20px; }
+  .control-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-row { grid-template-columns: 1fr; }
+  .review-sheet { padding: 28px 22px; }
+  .review-amount { font-size: 2.25rem; }
+  .toast-region { right: 14px; bottom: 14px; left: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
 
-/* Mobile (600px and below) */
-@media (max-width: 768px) {
-    .navbar-container {
-        flex-direction: column;
-        height: auto;
-        gap: 15px;
-        padding: 15px;
-    }
-
-    .nav-links {
-        flex-direction: column;
-        gap: 10px;
-        margin-left: 0;
-        width: 100%;
-    }
-
-    .nav-links a {
-        display: block;
-        padding: 10px;
-    }
-
-    .nav-user {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .container {
-        padding: 20px 15px;
-    }
-
-    .action-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-    }
-
-    .action-btn {
-        padding: 15px;
-    }
-
-    .action-icon {
-        font-size: 28px;
-    }
-
-    .action-label {
-        font-size: 12px;
-    }
-
-    .accounts-list,
-    .accounts-detailed {
-        grid-template-columns: 1fr;
-    }
-
-    .balance-card {
-        padding: 20px;
-    }
-
-    .balance-amount h3 {
-        font-size: 28px;
-    }
-
-    .balance-footer {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .recipients-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 15px;
-    }
-
-    .settings-layout {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .settings-sidebar {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        gap: 10px;
-    }
-
-    .settings-menu {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-
-    .menu-item {
-        flex: 1;
-        min-width: 100px;
-        text-align: center;
-        padding: 10px;
-        border-right: 1px solid var(--border-color);
-        border-bottom: none;
-    }
-
-    .menu-item:last-child {
-        border-right: none;
-    }
-
-    .menu-item.active {
-        border-left: none;
-        border-bottom: 3px solid var(--primary-color);
-        padding-bottom: 7px;
-    }
-
-    .card-display {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .transfer-card {
-        max-width: 100%;
-    }
-
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-
-    .card-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .balance-stats {
-        flex-direction: column;
-        gap: 15px;
-    }
+@media (max-width: 1100px) and (min-width: 781px) {
+  .app-shell { display: block; }
+  .sidebar { width: 100%; padding-inline: 20px; }
+  .sidebar .brand > span:last-child, .nav-item span { display: inline; }
+  .brand, .nav-item { justify-content: flex-start; }
+  .primary-nav { margin-left: 24px; }
+  .nav-item { padding-inline: 10px; }
+  .secondary-nav .nav-item span { display: none; }
+  .secondary-nav .nav-item svg { display: block; }
+  .workspace { padding: 0 0 64px; }
+  .marketing-hero { grid-template-columns: minmax(0, 1fr) 380px; gap: 20px; padding-inline: 42px; }
+  .phone-frame { transform: scale(.9) rotate(4deg); }
+  .floating-card { right: -10px; transform: scale(.9) rotate(-9deg); }
+  .story-card:first-child { grid-template-columns: 1fr 1fr; }
+  .art-card { width: 330px; }
+  .art-card-front { right: 60px; }
+  .security-campaign { grid-template-columns: 1fr 380px; padding-inline: 42px; }
+  .secure-phone { transform: scale(.9) rotate(4deg); }
 }
 
-/* Small Mobile (480px and below) */
-@media (max-width: 480px) {
-    .logo-icon {
-        font-size: 24px;
-    }
+@media (max-width: 780px) {
+  .workspace { padding: 0 0 54px; }
+  .view { padding-inline: 18px; }
+  #view-home { padding-inline: 0; }
+  .sidebar { position: fixed; inset: 0 auto 0 0; width: min(300px, 84vw); height: 100vh; flex-direction: column; align-items: stretch; padding: 28px 20px; }
+  .sidebar .brand { align-self: flex-start; }
+  .primary-nav { display: grid; width: 100%; margin: 52px 0 0; }
+  .secondary-nav { display: grid; width: 100%; margin: auto 0 0; }
+  .nav-item { width: 100%; }
+  .nav-item svg, .secondary-nav .nav-item svg { display: block; }
+  .secondary-nav .nav-item span { display: inline; }
+  .hero-grid { grid-template-columns: minmax(0, 1fr); }
+  .hero-grid > * { min-width: 0; }
+  .marketing-hero { min-height: auto; grid-template-columns: 1fr; gap: 24px; padding: 64px 24px 24px; text-align: center; }
+  .marketing-copy { margin-inline: auto; }
+  .marketing-copy h2 { font-size: clamp(3.6rem, 17vw, 6.4rem); }
+  .marketing-copy > p:not(.hero-kicker) { margin-inline: auto; }
+  .marketing-actions { justify-content: center; }
+  .product-visual { min-height: 560px; overflow: hidden; }
+  .phone-frame { transform: scale(.86) rotate(2deg); }
+  .floating-card { right: calc(50% - 230px); bottom: 82px; transform: scale(.82) rotate(-8deg); }
+  .orbit-one { width: 480px; height: 480px; }
+  .campaign-heading { padding-top: 80px; }
+  .promise-strip > div { animation-duration: 18s; }
+  .story-grid { grid-template-columns: 1fr; margin-block: 70px; padding-inline: 18px; }
+  .story-card, .story-card:first-child { grid-column: auto; grid-template-columns: 1fr; min-height: 720px; }
+  .story-card:first-child { min-height: 750px; }
+  .story-copy { padding: 34px 28px 10px; }
+  .story-copy h2 { font-size: clamp(3rem, 13vw, 5rem); }
+  .card-stack { min-height: 390px; }
+  .art-card { width: 310px; padding: 24px; }
+  .art-card-back { top: 65px; right: 5%; }
+  .art-card-front { right: 14%; bottom: 30px; }
+  .security-campaign { min-height: auto; grid-template-columns: 1fr; gap: 44px; margin-top: 80px; padding: 70px 24px; text-align: center; }
+  .security-copy { margin-inline: auto; }
+  .security-copy h2 { font-size: clamp(4rem, 17vw, 6.6rem); }
+  .security-copy > p:not(.eyebrow) { margin-inline: auto; }
+  .secure-phone { transform: scale(.88) rotate(2deg); }
+}
 
-    .logo-text {
-        font-size: 16px;
-    }
+@media (max-width: 520px) {
+  .card-topline { align-items: flex-start; flex-direction: column; }
+  .plan-pill { order: -1; }
+  .marketing-actions { align-items: stretch; flex-direction: column; }
+  .marketing-actions button { width: 100%; }
+  .product-visual { min-height: 510px; margin-inline: -24px; }
+  .phone-frame { transform: scale(.76) rotate(2deg); }
+  .floating-card { right: calc(50% - 205px); bottom: 70px; transform: scale(.72) rotate(-8deg); }
+  .campaign-heading { padding-inline: 20px; }
+  .story-card, .story-card:first-child { min-height: 680px; }
+  .art-card { width: 270px; }
+  .art-card-front { right: 10%; }
+  .bubble-one { width: 125px; height: 125px; font-size: 2rem; }
+  .saving-orbit { width: 210px; height: 210px; }
+  .secure-phone { width: 330px; transform: scale(.82) rotate(2deg); }
+}
 
-    .balance-amount h3 {
-        font-size: 24px;
-    }
+@media (max-width: 1180px) {
+  .reference-dashboard { grid-template-columns: 300px minmax(0, 1fr); }
+  .welcome-top, .rail-menu { padding-inline: 32px; }
+  .company-dashboard { padding-inline: 34px; }
+  .dashboard-metrics { display: none; }
+  .module-grid { grid-template-columns: repeat(3, 1fr); }
+}
 
-    .action-grid {
-        grid-template-columns: 1fr;
-    }
+@media (max-width: 860px) {
+  .app-shell:has(#view-home.is-active) > .mobile-header { display: flex; }
+  .reference-dashboard { grid-template-columns: 1fr; }
+  .welcome-rail { min-height: auto; grid-template-rows: auto auto; border-right: 0; border-bottom: 1px solid var(--cp-border); }
+  .welcome-top { min-height: 520px; padding: 40px 28px; }
+  .welcome-copy { margin-top: 70px; }
+  .rail-menu { grid-template-columns: 1fr 1fr; padding: 28px; }
+  .company-dashboard { padding: 42px 24px; }
+  .dashboard-tabs { align-items: flex-start; flex-direction: column; }
+  .currency-balances { grid-template-columns: 1fr auto; gap: 12px; }
+  .currency-balances > span:not(.current-balance) { display: none; }
+  .operations-grid { grid-template-columns: 1fr; }
+  .request-summary { min-height: 180px; }
+}
 
-    .action-btn {
-        padding: 12px;
-        gap: 8px;
-    }
+@media (max-width: 560px) {
+  .welcome-actions, .rail-menu { grid-template-columns: 1fr; }
+  .welcome-top { min-height: 540px; }
+  .welcome-copy h2 { font-size: 2.2rem; }
+  .dashboard-links { width: 100%; gap: 20px; overflow-x: auto; }
+  .currency-balances .current-balance { font-size: 2.45rem; }
+  .balance-chart { height: 110px; }
+  .module-grid { grid-template-columns: repeat(2, 1fr); }
+  .employee-requests article { grid-template-columns: auto 1fr auto 22px; }
+  .employee-requests article button:nth-of-type(2), .employee-requests article button:nth-of-type(3) { display: none; }
+}
 
-    .action-icon {
-        font-size: 24px;
-    }
+@media (max-width: 900px) {
+  .app-shell:not(:has(#view-home.is-active)) > .sidebar { width: 84px; padding-inline: 14px; }
+  .app-shell:not(:has(#view-home.is-active)) .sidebar .brand > span:last-child,
+  .app-shell:not(:has(#view-home.is-active)) .nav-item span { display: none; }
+  .app-shell:not(:has(#view-home.is-active)) .nav-item { justify-content: center; }
+  .app-shell:not(:has(#view-home.is-active)) .workspace { padding-left: 84px; }
+  #view-payments .payment-layout, #view-cards .cards-layout { grid-template-columns: 1fr; }
+}
 
-    .action-label {
-        font-size: 11px;
-    }
-
-    .section-title {
-        font-size: 18px;
-    }
-
-    .header-section h1 {
-        font-size: 24px;
-    }
-
-    .transaction-item {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .transaction-amount {
-        align-self: flex-start;
-    }
-
-    .card {
-        height: 180px;
-        padding: 16px;
-    }
-
-    .card-number {
-        font-size: 16px;
-        gap: 8px;
-    }
-
-    .recipient-card {
-        padding: 15px;
-    }
-
-    .recipient-avatar {
-        font-size: 36px;
-    }
-
-    .btn-large {
-        padding: 12px 16px;
-        font-size: 14px;
-    }
+@media (max-width: 780px) {
+  .app-shell:not(:has(#view-home.is-active)) > .sidebar { width: min(300px, 84vw); padding: 28px 20px; }
+  .app-shell:not(:has(#view-home.is-active)) .sidebar .brand > span:last-child,
+  .app-shell:not(:has(#view-home.is-active)) .nav-item span { display: inline; }
+  .app-shell:not(:has(#view-home.is-active)) .nav-item { justify-content: flex-start; }
+  .app-shell:not(:has(#view-home.is-active)) .workspace { padding-left: 0; }
+  .app-shell:not(:has(#view-home.is-active)) .topbar { padding-inline: 18px; }
+  .app-shell:not(:has(#view-home.is-active)) .view { padding: 32px 18px; }
 }

@@ -1,330 +1,283 @@
-/* ============================================
-   FERN BANK - MAIN JAVASCRIPT
-   ============================================ */
+const transactions = [
+  { icon: "A", name: "Amano", detail: "Dining · Today, 12:42 PM", amount: "-NZ$18.40", status: "Completed" },
+  { icon: "S", name: "Salary", detail: "Northstar Studio · Today, 8:04 AM", amount: "+NZ$5,420.00", status: "Income", positive: true },
+  { icon: "M", name: "Meadowlark Market", detail: "Groceries · Yesterday", amount: "-NZ$84.16", status: "Completed" },
+  { icon: "AT", name: "Auckland Transport", detail: "Transport · 25 Aug", amount: "-NZ$22.00", status: "Completed" },
+  { icon: "N", name: "Neon", detail: "Entertainment · 24 Aug", amount: "-NZ$19.99", status: "Completed" }
+];
 
-// Navigation
-document.addEventListener('DOMContentLoaded', function() {
-    initializeNavigation();
-    initializePages();
+const accounts = [
+  { currency: "NZD", title: "Everyday", balance: "NZ$18,425.20", detail: "•• 4821 · Main account" },
+  { currency: "AUD", title: "Australian dollars", balance: "A$3,842.18", detail: "•• 0974 · Travel" },
+  { currency: "USD", title: "US dollars", balance: "US$1,520.44", detail: "•• 3118 · Foreign currency" }
+];
+
+const rates = {
+  "NZD-AUD": 0.923, "NZD-USD": 0.611,
+  "AUD-NZD": 1.083, "AUD-USD": 0.662,
+  "USD-NZD": 1.637, "USD-AUD": 1.51
+};
+
+const state = {
+  activeView: "home",
+  balanceVisible: true,
+  cardFrozen: false,
+  pendingTransfer: null
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderTransactions();
+  renderAccounts();
+  bindNavigation();
+  bindDashboard();
+  bindPayments();
+  bindCards();
+  bindAccounts();
+  bindSettings();
+  bindGlobalFeedback();
+  navigate((location.hash || "#home").slice(1), false);
 });
 
-function initializeNavigation() {
-    const navLinks = document.querySelectorAll('.nav-links a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const page = this.getAttribute('data-page');
-            if (page) {
-                showPage(page);
-                updateActiveNav(this);
-            }
-        });
+function renderTransactions() {
+  document.getElementById("recentTransactions").innerHTML = transactions.map(item => `
+    <article class="transaction-row">
+      <div class="transaction-main">
+        <span class="activity-icon ${item.positive ? "success" : ""}">${item.icon}</span>
+        <div><strong>${item.name}</strong><small>${item.detail}</small></div>
+      </div>
+      <strong class="transaction-amount ${item.positive ? "positive-copy" : ""}">${item.amount}<small>${item.status}</small></strong>
+    </article>
+  `).join("");
+}
+
+function renderAccounts() {
+  document.getElementById("accountGrid").innerHTML = accounts.map(account => `
+    <article class="surface account-tile">
+      <header>
+        <span class="currency-flag">${account.currency}</span>
+        <button class="bare-icon" type="button" aria-label="Open ${account.title} account options" data-toast="${account.title} account options opened">•••</button>
+      </header>
+      <strong>${account.balance}</strong>
+      <small>${account.detail}</small>
+    </article>
+  `).join("");
+}
+
+function bindNavigation() {
+  document.querySelectorAll("[data-view]").forEach(button => {
+    button.addEventListener("click", () => navigate(button.dataset.view));
+  });
+
+  document.getElementById("menuToggle").addEventListener("click", () => {
+    const sidebar = document.querySelector(".sidebar");
+    const isOpen = sidebar.classList.toggle("is-open");
+    document.getElementById("menuToggle").setAttribute("aria-expanded", String(isOpen));
+  });
+
+  window.addEventListener("hashchange", () => navigate((location.hash || "#home").slice(1), false));
+}
+
+function navigate(viewName, updateHash = true) {
+  if (!document.getElementById(`view-${viewName}`)) viewName = "home";
+  state.activeView = viewName;
+
+  document.querySelectorAll(".view").forEach(view => {
+    view.classList.toggle("is-active", view.id === `view-${viewName}`);
+  });
+  document.querySelectorAll(".nav-item[data-view]").forEach(item => {
+    item.classList.toggle("is-active", item.dataset.view === viewName);
+  });
+
+  const active = document.getElementById(`view-${viewName}`);
+  document.getElementById("pageTitle").textContent = active.dataset.title;
+  document.title = `${active.dataset.title} · Fern Bank`;
+  document.querySelector(".sidebar").classList.remove("is-open");
+  document.getElementById("menuToggle").setAttribute("aria-expanded", "false");
+  if (updateHash) history.pushState(null, "", `#${viewName}`);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function bindDashboard() {
+  document.getElementById("balanceToggle").addEventListener("click", () => {
+    state.balanceVisible = !state.balanceVisible;
+    document.getElementById("balanceValue").textContent = state.balanceVisible ? "NZ$24,680.42" : "NZ$••••••";
+    document.getElementById("balanceToggle").setAttribute("aria-label", state.balanceVisible ? "Hide balance" : "Show balance");
+  });
+
+  document.getElementById("addMoneyButton").addEventListener("click", () => toast("Add money flow ready for the client to extend"));
+  document.getElementById("requestButton").addEventListener("click", () => toast("Payment link copied for this demo"));
+
+  const notificationButton = document.getElementById("notificationButton");
+  notificationButton.addEventListener("click", () => {
+    const panel = document.getElementById("notificationPanel");
+    panel.hidden = !panel.hidden;
+    notificationButton.setAttribute("aria-expanded", String(!panel.hidden));
+  });
+
+  document.getElementById("markReadButton").addEventListener("click", () => {
+    document.querySelector(".notification-dot").hidden = true;
+    document.getElementById("notificationPanel").hidden = true;
+    notificationButton.setAttribute("aria-expanded", "false");
+    toast("Notifications marked as read");
+  });
+
+  document.addEventListener("click", event => {
+    const panel = document.getElementById("notificationPanel");
+    if (!panel.hidden && !panel.contains(event.target) && !notificationButton.contains(event.target)) {
+      panel.hidden = true;
+      notificationButton.setAttribute("aria-expanded", "false");
+    }
+  });
+}
+
+function bindPayments() {
+  document.querySelectorAll("[data-recipient]").forEach(button => {
+    button.addEventListener("click", () => {
+      document.getElementById("recipient").value = button.dataset.recipient;
+      document.getElementById("recipient").focus();
     });
+  });
 
-    // Set dashboard as active by default
-    const dashboardLink = document.querySelector('[data-page="dashboard"]');
-    if (dashboardLink) {
-        updateActiveNav(dashboardLink);
+  document.getElementById("clearRecipient").addEventListener("click", () => {
+    document.getElementById("recipient").value = "";
+    document.getElementById("recipient").focus();
+  });
+
+  document.getElementById("transferForm").addEventListener("submit", event => {
+    event.preventDefault();
+    const recipient = document.getElementById("recipient").value.trim();
+    const amount = Number(document.getElementById("transferAmount").value);
+    const currency = document.getElementById("transferCurrency").value;
+    const reference = document.getElementById("transferReference").value.trim();
+    const error = document.getElementById("transferError");
+
+    if (!recipient) {
+      error.textContent = "Choose a recipient before continuing.";
+      document.getElementById("recipient").focus();
+      return;
     }
+    if (!Number.isFinite(amount) || amount <= 0) {
+      error.textContent = "Enter an amount greater than zero.";
+      document.getElementById("transferAmount").focus();
+      return;
+    }
+    if (amount > 18425.2) {
+      error.textContent = "This amount is higher than the available account balance.";
+      document.getElementById("transferAmount").focus();
+      return;
+    }
+
+    error.textContent = "";
+    state.pendingTransfer = { recipient, amount, currency, reference };
+    document.getElementById("reviewRecipient").textContent = recipient;
+    document.getElementById("reviewAmount").textContent = `${currency} ${amount.toLocaleString("en-NZ", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById("reviewReference").textContent = reference || "Not provided";
+    toggleReviewSheet(true);
+  });
+
+  document.getElementById("closeSheet").addEventListener("click", () => toggleReviewSheet(false));
+  document.getElementById("sheetBackdrop").addEventListener("click", () => toggleReviewSheet(false));
+  document.getElementById("confirmTransfer").addEventListener("click", () => {
+    const transfer = state.pendingTransfer;
+    toggleReviewSheet(false);
+    document.getElementById("transferForm").reset();
+    document.getElementById("recipient").value = "Olivia Lee";
+    toast(`${transfer.currency} ${transfer.amount.toFixed(2)} sent to ${transfer.recipient}`);
+    state.pendingTransfer = null;
+    navigate("home");
+  });
 }
 
-function updateActiveNav(element) {
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.classList.remove('active');
+function toggleReviewSheet(open) {
+  document.getElementById("reviewSheet").hidden = !open;
+  document.getElementById("sheetBackdrop").hidden = !open;
+  document.body.style.overflow = open ? "hidden" : "";
+  if (open) document.getElementById("closeSheet").focus();
+}
+
+function bindCards() {
+  document.getElementById("freezeCard").addEventListener("click", () => {
+    state.cardFrozen = !state.cardFrozen;
+    document.querySelector(".frozen-overlay").hidden = !state.cardFrozen;
+    const status = document.getElementById("cardStatus");
+    status.textContent = state.cardFrozen ? "Frozen" : "Active";
+    status.classList.toggle("is-frozen", state.cardFrozen);
+    const button = document.getElementById("freezeCard");
+    button.querySelector("strong").textContent = state.cardFrozen ? "Unfreeze" : "Freeze";
+    button.querySelector("small").textContent = state.cardFrozen ? "Restore card use" : "Temporarily lock";
+    toast(state.cardFrozen ? "Card frozen. Payments are blocked." : "Card active. Payments are enabled.");
+  });
+
+  document.getElementById("addCardButton").addEventListener("click", () => toast("New card application opened"));
+}
+
+function bindAccounts() {
+  const sellAmount = document.getElementById("sellAmount");
+  const sellCurrency = document.getElementById("sellCurrency");
+  const receiveCurrency = document.getElementById("receiveCurrency");
+
+  const updateExchange = () => {
+    if (sellCurrency.value === receiveCurrency.value) {
+      receiveCurrency.value = receiveCurrency.value === "NZD" ? "AUD" : "NZD";
+    }
+    const rate = rates[`${sellCurrency.value}-${receiveCurrency.value}`] || 1;
+    const amount = Number(sellAmount.value) || 0;
+    document.getElementById("receiveAmount").textContent = (amount * rate).toLocaleString("en-NZ", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+
+  [sellAmount, sellCurrency, receiveCurrency].forEach(control => control.addEventListener("input", updateExchange));
+  document.getElementById("swapCurrencies").addEventListener("click", () => {
+    const originalSell = sellCurrency.value;
+    sellCurrency.value = receiveCurrency.value;
+    receiveCurrency.value = originalSell;
+    updateExchange();
+  });
+  document.getElementById("exchangeForm").addEventListener("submit", event => {
+    event.preventDefault();
+    toast(`Exchange preview: ${sellCurrency.value} to ${receiveCurrency.value}`);
+  });
+  document.getElementById("newAccountButton").addEventListener("click", () => toast("Account catalogue opened"));
+}
+
+function bindSettings() {
+  document.querySelectorAll("[data-settings-tab]").forEach(button => {
+    button.addEventListener("click", () => {
+      const tab = button.dataset.settingsTab;
+      document.querySelectorAll("[data-settings-tab]").forEach(item => item.classList.toggle("is-active", item === button));
+      document.querySelectorAll(".settings-panel").forEach(panel => panel.classList.toggle("is-active", panel.id === `settings-${tab}`));
     });
-    element.classList.add('active');
+  });
+
+  document.getElementById("profileForm").addEventListener("submit", event => {
+    event.preventDefault();
+    toast("Profile changes saved");
+  });
+
+  document.getElementById("themeToggle").addEventListener("click", () => {
+    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    toast(`${next[0].toUpperCase()}${next.slice(1)} appearance enabled`);
+  });
 }
 
-function showPage(page) {
-    const pages = document.querySelectorAll('[data-page-content]');
-    pages.forEach(p => {
-        p.style.display = p.getAttribute('data-page-content') === page ? 'block' : 'none';
-    });
-    window.scrollTo(0, 0);
+function bindGlobalFeedback() {
+  document.addEventListener("click", event => {
+    const trigger = event.target.closest("[data-toast]");
+    if (trigger) toast(trigger.dataset.toast);
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") return;
+    if (!document.getElementById("reviewSheet").hidden) toggleReviewSheet(false);
+    document.getElementById("notificationPanel").hidden = true;
+    document.querySelector(".sidebar").classList.remove("is-open");
+  });
 }
 
-function initializePages() {
-    initializeDashboard();
-    initializeTransfer();
-    initializeCards();
-    initializeSettings();
-}
-
-/* ============================================
-   DASHBOARD PAGE
-   ============================================ */
-
-function initializeDashboard() {
-    const balanceToggle = document.querySelector('.balance-toggle');
-    if (balanceToggle) {
-        balanceToggle.addEventListener('click', toggleBalance);
-    }
-
-    const actionButtons = document.querySelectorAll('.action-btn');
-    actionButtons.forEach(btn => {
-        btn.addEventListener('click', handleActionClick);
-    });
-}
-
-function toggleBalance() {
-    const balanceAmount = document.querySelector('.balance-amount h3');
-    if (balanceAmount.textContent.includes('***')) {
-        balanceAmount.textContent = '$2,547.89';
-    } else {
-        balanceAmount.textContent = '***';
-    }
-}
-
-function handleActionClick(e) {
-    e.preventDefault();
-    const action = e.currentTarget.getAttribute('data-action');
-    const navLink = document.querySelector(`[data-page="${action}"]`);
-    if (navLink) {
-        navLink.click();
-    }
-}
-
-/* ============================================
-   TRANSFER PAGE
-   ============================================ */
-
-function initializeTransfer() {
-    const recipientInput = document.getElementById('recipient');
-    if (recipientInput) {
-        recipientInput.addEventListener('input', filterSuggestions);
-        recipientInput.addEventListener('focus', showSuggestions);
-    }
-
-    const amountInput = document.getElementById('amount');
-    if (amountInput) {
-        amountInput.addEventListener('change', calculateFee);
-    }
-
-    const transferForm = document.getElementById('transferForm');
-    if (transferForm) {
-        transferForm.addEventListener('submit', handleTransferSubmit);
-    }
-
-    const recipientCards = document.querySelectorAll('.recipient-card');
-    recipientCards.forEach(card => {
-        card.addEventListener('click', selectRecipient);
-    });
-}
-
-function filterSuggestions() {
-    const input = document.getElementById('recipient');
-    const suggestions = document.querySelector('.suggestions');
-    const query = input.value.toLowerCase();
-
-    if (!suggestions) return;
-
-    const items = suggestions.querySelectorAll('.suggestion-item');
-    items.forEach(item => {
-        const name = item.querySelector('.suggestion-name').textContent.toLowerCase();
-        const email = item.querySelector('.suggestion-email').textContent.toLowerCase();
-        item.style.display = name.includes(query) || email.includes(query) ? 'flex' : 'none';
-    });
-
-    suggestions.style.display = query.length > 0 ? 'block' : 'none';
-}
-
-function showSuggestions() {
-    const suggestions = document.querySelector('.suggestions');
-    if (suggestions && document.getElementById('recipient').value) {
-        suggestions.style.display = 'block';
-    }
-}
-
-function selectRecipient(e) {
-    e.preventDefault();
-    const name = e.currentTarget.querySelector('.suggestion-name').textContent;
-    const email = e.currentTarget.querySelector('.suggestion-email').textContent;
-    document.getElementById('recipient').value = name;
-    document.querySelector('.suggestions').style.display = 'none';
-}
-
-function calculateFee() {
-    const amount = parseFloat(document.getElementById('amount').value) || 0;
-    const feeElement = document.querySelector('.fee-row:nth-child(2) .fee-value');
-    const totalElement = document.querySelector('.fee-row.total .fee-value');
-
-    if (amount <= 100) {
-        const fee = 0;
-        feeElement.textContent = `$${fee.toFixed(2)}`;
-        feeElement.className = 'fee-value fee-free';
-    } else if (amount <= 1000) {
-        const fee = (amount * 0.01).toFixed(2);
-        feeElement.textContent = `$${fee}`;
-        feeElement.className = 'fee-value';
-    } else {
-        const fee = (amount * 0.015).toFixed(2);
-        feeElement.textContent = `$${fee}`;
-        feeElement.className = 'fee-value';
-    }
-
-    const fee = parseFloat(feeElement.textContent.replace('$', ''));
-    const total = amount + fee;
-    totalElement.textContent = `$${total.toFixed(2)}`;
-}
-
-function handleTransferSubmit(e) {
-    e.preventDefault();
-    const recipient = document.getElementById('recipient').value;
-    const amount = document.getElementById('amount').value;
-    const fromAccount = document.getElementById('fromAccount').value;
-
-    if (!recipient || !amount) {
-        alert('Please fill in all required fields');
-        return;
-    }
-
-    alert(`Transfer of $${amount} to ${recipient} initiated!\n\nFrom: ${fromAccount}\n\nPlease review and confirm the transaction on your device.`);
-    e.target.reset();
-}
-
-/* ============================================
-   CARDS PAGE
-   ============================================ */
-
-function initializeCards() {
-    const cardMenus = document.querySelectorAll('.card-menu');
-    cardMenus.forEach(menu => {
-        menu.addEventListener('click', showCardMenu);
-    });
-
-    const cardActions = document.querySelectorAll('.card-actions .btn');
-    cardActions.forEach(btn => {
-        btn.addEventListener('click', handleCardAction);
-    });
-}
-
-function showCardMenu(e) {
-    e.stopPropagation();
-    const cardType = e.currentTarget.closest('.card-display').querySelector('.card').classList.contains('physical-card') ? 'physical' : 'virtual';
-    const actions = ['View PIN', 'Lock Card', 'Settings', 'Report Lost'];
-    const action = prompt(`Card Actions (${cardType}):\n\n${actions.join('\n')}\n\nEnter action number (1-4):`, '1');
-
-    if (action) {
-        const actionNames = ['View PIN', 'Lock Card', 'Settings', 'Report Lost'];
-        alert(`"${actionNames[parseInt(action) - 1] || 'Invalid'}" action initiated`);
-    }
-}
-
-function handleCardAction(e) {
-    e.preventDefault();
-    const actionText = e.currentTarget.textContent;
-    alert(`${actionText} initiated`);
-}
-
-/* ============================================
-   SETTINGS PAGE
-   ============================================ */
-
-function initializeSettings() {
-    const menuItems = document.querySelectorAll('.settings-menu .menu-item');
-    menuItems.forEach(item => {
-        item.addEventListener('click', switchSettingsPanel);
-    });
-
-    const toggleSwitches = document.querySelectorAll('.toggle-switch input');
-    toggleSwitches.forEach(toggle => {
-        toggle.addEventListener('change', handleToggleChange);
-    });
-
-    const settingsForm = document.getElementById('profileForm');
-    if (settingsForm) {
-        settingsForm.addEventListener('submit', handleSettingsSave);
-    }
-
-    const passwordForm = document.getElementById('passwordForm');
-    if (passwordForm) {
-        passwordForm.addEventListener('submit', handlePasswordChange);
-    }
-
-    const logoutBtn = document.querySelector('[data-action="logout"]');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', handleLogout);
-    }
-}
-
-function switchSettingsPanel(e) {
-    e.preventDefault();
-    const panelId = e.currentTarget.getAttribute('data-panel');
-
-    // Update menu items
-    document.querySelectorAll('.settings-menu .menu-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    e.currentTarget.classList.add('active');
-
-    // Update panels
-    document.querySelectorAll('.settings-panel').forEach(panel => {
-        panel.style.display = panel.id === panelId ? 'block' : 'none';
-    });
-}
-
-function handleToggleChange(e) {
-    const label = e.currentTarget.closest('.toggle-item').querySelector('.toggle-info p:first-child').textContent;
-    const state = e.currentTarget.checked ? 'enabled' : 'disabled';
-    console.log(`${label} ${state}`);
-}
-
-function handleSettingsSave(e) {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    alert('Profile updated successfully!');
-}
-
-function handlePasswordChange(e) {
-    e.preventDefault();
-    const currentPassword = document.getElementById('currentPassword').value;
-    const newPassword = document.getElementById('newPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-
-    if (!currentPassword || !newPassword || !confirmPassword) {
-        alert('Please fill in all password fields');
-        return;
-    }
-
-    if (newPassword !== confirmPassword) {
-        alert('New passwords do not match');
-        return;
-    }
-
-    if (newPassword.length < 8) {
-        alert('Password must be at least 8 characters long');
-        return;
-    }
-
-    alert('Password changed successfully!');
-    e.target.reset();
-}
-
-function handleLogout(e) {
-    e.preventDefault();
-    if (confirm('Are you sure you want to log out?')) {
-        alert('Logged out successfully');
-        // In a real app, this would redirect to login page
-    }
-}
-
-/* ============================================
-   UTILITY FUNCTIONS
-   ============================================ */
-
-function formatCurrency(amount, currency = 'USD') {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: currency,
-        minimumFractionDigits: 2,
-    }).format(amount);
-}
-
-function formatDate(date) {
-    return new Intl.DateTimeFormat('en-US', {
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    }).format(new Date(date));
+function toast(message) {
+  const item = document.createElement("div");
+  item.className = "toast";
+  item.textContent = message;
+  document.getElementById("toastRegion").appendChild(item);
+  window.setTimeout(() => item.remove(), 3200);
 }
