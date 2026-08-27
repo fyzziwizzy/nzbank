@@ -1,0 +1,241 @@
+/* ============================================
+   FERN BANK - RESPONSIVE DESIGN
+   ============================================ */
+
+/* Tablet (768px and up) */
+@media (max-width: 1024px) {
+    .navbar-container {
+        padding: 0 15px;
+    }
+
+    .nav-links {
+        gap: 20px;
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 30px 15px;
+    }
+
+    .action-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+
+    .settings-layout {
+        grid-template-columns: 200px 1fr;
+        gap: 20px;
+    }
+
+    .card-display {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .balance-card {
+        padding: 20px;
+    }
+
+    .balance-amount h3 {
+        font-size: 36px;
+    }
+}
+
+/* Mobile (600px and below) */
+@media (max-width: 768px) {
+    .navbar-container {
+        flex-direction: column;
+        height: auto;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 10px;
+    }
+
+    .nav-user {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .container {
+        padding: 20px 15px;
+    }
+
+    .action-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .action-btn {
+        padding: 15px;
+    }
+
+    .action-icon {
+        font-size: 28px;
+    }
+
+    .action-label {
+        font-size: 12px;
+    }
+
+    .accounts-list,
+    .accounts-detailed {
+        grid-template-columns: 1fr;
+    }
+
+    .balance-card {
+        padding: 20px;
+    }
+
+    .balance-amount h3 {
+        font-size: 28px;
+    }
+
+    .balance-footer {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .recipients-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 15px;
+    }
+
+    .settings-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .settings-sidebar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 10px;
+    }
+
+    .settings-menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .menu-item {
+        flex: 1;
+        min-width: 100px;
+        text-align: center;
+        padding: 10px;
+        border-right: 1px solid var(--border-color);
+        border-bottom: none;
+    }
+
+    .menu-item:last-child {
+        border-right: none;
+    }
+
+    .menu-item.active {
+        border-left: none;
+        border-bottom: 3px solid var(--primary-color);
+        padding-bottom: 7px;
+    }
+
+    .card-display {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .transfer-card {
+        max-width: 100%;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .card-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .balance-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* Small Mobile (480px and below) */
+@media (max-width: 480px) {
+    .logo-icon {
+        font-size: 24px;
+    }
+
+    .logo-text {
+        font-size: 16px;
+    }
+
+    .balance-amount h3 {
+        font-size: 24px;
+    }
+
+    .action-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .action-btn {
+        padding: 12px;
+        gap: 8px;
+    }
+
+    .action-icon {
+        font-size: 24px;
+    }
+
+    .action-label {
+        font-size: 11px;
+    }
+
+    .section-title {
+        font-size: 18px;
+    }
+
+    .header-section h1 {
+        font-size: 24px;
+    }
+
+    .transaction-item {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .transaction-amount {
+        align-self: flex-start;
+    }
+
+    .card {
+        height: 180px;
+        padding: 16px;
+    }
+
+    .card-number {
+        font-size: 16px;
+        gap: 8px;
+    }
+
+    .recipient-card {
+        padding: 15px;
+    }
+
+    .recipient-avatar {
+        font-size: 36px;
+    }
+
+    .btn-large {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+}

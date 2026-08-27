@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fern Bank - Modern Digital Banking</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <span class="logo-icon">🌿</span>
+                <span class="logo-text">Fern Bank</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Dashboard</a></li>
+                <li><a href="accounts.html">Accounts</a></li>
+                <li><a href="transfer.html">Send Money</a></li>
+                <li><a href="cards.html">Cards</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+            <div class="nav-user">
+                <div class="user-avatar">JD</div>
+                <div class="user-menu">
+                    <p class="user-name">John Doe</p>
+                    <p class="user-email">john@fernbank.com</p>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Header Section -->
+            <section class="header-section">
+                <h1>Welcome back, John</h1>
+                <p class="subtitle">Here's your financial overview</p>
+            </section>
+
+            <!-- Balance Card -->
+            <section class="balance-section">
+                <div class="balance-card">
+                    <div class="balance-header">
+                        <h2>Total Balance</h2>
+                        <span class="balance-toggle">👁️</span>
+                    </div>
+                    <div class="balance-amount">
+                        <span class="currency">USD</span>
+                        <h3 class="amount">$12,345.67</h3>
+                    </div>
+                    <div class="balance-footer">
+                        <div class="balance-stat">
+                            <span class="stat-label">Monthly In</span>
+                            <span class="stat-value">+$3,200</span>
+                        </div>
+                        <div class="balance-stat">
+                            <span class="stat-label">Monthly Out</span>
+                            <span class="stat-value">-$1,850</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="action-grid">
+                    <a href="transfer.html" class="action-btn">
+                        <span class="action-icon">📤</span>
+                        <span class="action-label">Send Money</span>
+                    </a>
+                    <a href="cards.html" class="action-btn">
+                        <span class="action-icon">💳</span>
+                        <span class="action-label">Cards</span>
+                    </a>
+                    <a href="accounts.html" class="action-btn">
+                        <span class="action-icon">💰</span>
+                        <span class="action-label">Accounts</span>
+                    </a>
+                    <a href="settings.html" class="action-btn">
+                        <span class="action-icon">⚙️</span>
+                        <span class="action-label">Settings</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Accounts Overview -->
+            <section class="accounts-section">
+                <h2>Your Accounts</h2>
+                <div class="accounts-list">
+                    <div class="account-card">
+                        <div class="account-header">
+                            <span class="account-type">💵 USD Account</span>
+                            <span class="account-status">Active</span>
+                        </div>
+                        <div class="account-iban">
+                            <span class="label">IBAN</span>
+                            <span class="value">GB** **** **** **** 7890</span>
+                        </div>
+                        <div class="account-balance">
+                            <span class="label">Balance</span>
+                            <span class="value">$8,450.32</span>
+                        </div>
+                    </div>
+
+                    <div class="account-card">
+                        <div class="account-header">
+                            <span class="account-type">€ EUR Account</span>
+                            <span class="account-status">Active</span>
+                        </div>
+                        <div class="account-iban">
+                            <span class="label">IBAN</span>
+                            <span class="value">GB** **** **** **** 5678</span>
+                        </div>
+                        <div class="account-balance">
+                            <span class="label">Balance</span>
+                            <span class="value">€3,895.35</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent Transactions -->
+            <section class="transactions-section">
+                <h2>Recent Transactions</h2>
+                <div class="transactions-list">
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <span class="transaction-icon">🏪</span>
+                            <div class="transaction-details">
+                                <span class="transaction-name">Grocery Store</span>
+                                <span class="transaction-date">Today at 2:45 PM</span>
+                            </div>
+                        </div>
+                        <span class="transaction-amount negative">-$32.50</span>
+                    </div>
+
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <span class="transaction-icon">💼</span>
+                            <div class="transaction-details">
+                                <span class="transaction-name">Salary Deposit</span>
+                                <span class="transaction-date">Yesterday at 9:00 AM</span>
+                            </div>
+                        </div>
+                        <span class="transaction-amount positive">+$3,200.00</span>
+                    </div>
+
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <span class="transaction-icon">🎬</span>
+                            <div class="transaction-details">
+                                <span class="transaction-name">Netflix Subscription</span>
+                                <span class="transaction-date">Aug 25 at 12:00 AM</span>
+                            </div>
+                        </div>
+                        <span class="transaction-amount negative">-$15.99</span>
+                    </div>
+
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <span class="transaction-icon">✈️</span>
+                            <div class="transaction-details">
+                                <span class="transaction-name">Airbnb Booking</span>
+                                <span class="transaction-date">Aug 23 at 6:30 PM</span>
+                            </div>
+                        </div>
+                        <span class="transaction-amount negative">-$287.00</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Fern Bank. All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Security</a></li>
+                <li><a href="#">Contact Support</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
